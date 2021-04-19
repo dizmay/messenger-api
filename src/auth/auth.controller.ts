@@ -11,7 +11,6 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Logging in' })
   @ApiResponse({ status: 200, type: 'JWT token' })
-  @UsePipes(ValidationPipe)
   @Post('/login')
   login(@Body() userDto: LoginUserDto) {
     return this.authService.login(userDto);
