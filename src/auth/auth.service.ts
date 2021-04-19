@@ -24,11 +24,18 @@ export class AuthService {
 
   private async validateUser(userDto: LoginUserDto) {
     const user = await this.userService.getByEmail(userDto.email);
-    const isPasswordCorrect = await compare(userDto.password, user.password);
-    if (user && isPasswordCorrect) {
-      return user;
+
+    if (!user) {
+      throw new UnauthorizedException({ message: 'User not found!' });
     }
-    throw new UnauthorizedException({ message: 'Wrong email or password!' });
+
+    const isPasswordCorrect = await compare(userDto.password, user.password);
+
+    if (!isPasswordCorrect) {
+      throw new UnauthorizedException({ message: 'Wrong email or password!' });
+    }
+
+    return user;
   }
 
   async login(userDto: LoginUserDto) {

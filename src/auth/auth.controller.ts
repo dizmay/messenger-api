@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CreateUserDto, LoginUserDto } from 'src/users/dto';
 import { AuthService } from './auth.service';
 
@@ -10,6 +11,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Logging in' })
   @ApiResponse({ status: 200, type: 'JWT token' })
+  @UsePipes(ValidationPipe)
   @Post('/login')
   login(@Body() userDto: LoginUserDto) {
     return this.authService.login(userDto);
@@ -17,6 +19,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Registration' })
   @ApiResponse({ status: 200, type: 'JWT token' })
+  @UsePipes(ValidationPipe)
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
     return this.authService.registration(userDto);
