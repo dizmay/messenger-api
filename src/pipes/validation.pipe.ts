@@ -11,7 +11,11 @@ export class ValidationPipe implements PipeTransform {
 
     if (errors.length > 0) {
       const messages = errors.map((err) => Object.values(err.constraints));
-      throw new ValidationException(messages);
+      const response = Object.assign(
+        {},
+        ...messages.map((message, id) => ({ [id]: message })),
+      );
+      throw new ValidationException(response);
     }
 
     return value;
